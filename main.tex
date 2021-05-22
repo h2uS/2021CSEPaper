@@ -6,12 +6,15 @@
 \usepackage{amsmath}
 \usepackage{forest}
 \usepackage{booktabs}
+\usepackage{caption}
 \usepackage{titling}
 \newcommand{\subtitle}[1]{%
 	\posttitle{%
 		\par\end{center}
 	\begin{center}\large#1\end{center}
 	\vskip0.1em}}%
+
+\newtheorem{definition}{Definition}
 
 \title{이산균등분포로부터 임의의 확률분포를 만들어내는\\시행 규칙 생성 알고리즘 연구}
 \subtitle{보드게임에서의 확률적 요소 구현에 관하여}
@@ -174,7 +177,7 @@ for tree={
 ]
 \end{forest}
 }
-\caption{높이가 3인 포화 4진 트리}
+\caption{}
 \label{fig01}
 \end{figure}
 
@@ -184,7 +187,7 @@ for tree={
 
 \singlespacing \[X \sim \textnormal{unif}\{1, 2\}\] \doublespacing
 
-동전을 반복적으로 던지면 매 시행마다 \textit{X}의 값을 얻을 수 있다. 이제 어떤 정 이진트리(full binary tree)가 주어졌을 때, 해당 트리의 root에서 시작하여 leaf에 도달할 때까지 매번 동전을 던지는 시행을 통해 얻는 \textit{X}의 값에 따라 대응되는 간선으로 이동하며 한 단계씩 내려가는 규칙을 따른다고 생각해보자.
+동전을 반복적으로 던지면 매 시행마다 \textit{X}의 값을 얻을 수 있다. 이제 어떤 정 이진 트리(full binary tree)가 주어졌을 때, 해당 트리의 root에서 시작하여 leaf에 도달할 때까지 매번 동전을 던지는 시행을 통해 얻는 \textit{X}의 값에 따라 대응되는 간선으로 이동하며 한 단계씩 내려가는 규칙을 따른다고 생각해보자.
 
 \begin{figure}[h]
 \centering
@@ -207,10 +210,10 @@ for tree = {
   [D, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
 ]
 \end{forest}
-\caption{각 노드에서 왼쪽, 오른쪽 자식 방향 간선이 각각 1, 2에 대응되는 정 이진트리}
+\caption{}
 \label{fig02}
 \end{figure}
-Figure \ref{fig02}의 정 이진트리는 A부터 D까지 총 4개의 leaf를 가진다. 이 트리에서 앞에서 설명한 규칙을 따라 이동하면 최종적으로 4개의 leaf 중 하나에 도달하게 될 것이다. root에서 시작하여 각 leaf에 도달할 확률은 다음과 같다.
+Figure \ref{fig02}의 정 이진 트리는 A부터 D까지 총 4개의 leaf를 가진다. 이 트리에서 앞에서 설명한 규칙을 따라 이동하면 최종적으로 4개의 leaf 중 하나에 도달하게 될 것이다. root에서 시작하여 각 leaf에 도달할 확률은 다음과 같다.
 
 \begin{table}[h]
 \centering
@@ -222,6 +225,8 @@ Figure \ref{fig02}의 정 이진트리는 A부터 D까지 총 4개의 leaf를 �
 \textbf{확률} & $\displaystyle \left(\frac{1}{2}\right)^2$ & $\displaystyle \left(\frac{1}{2}\right)^3$ & $\displaystyle \left(\frac{1}{2}\right)^3$ & $\displaystyle \frac{1}{2}$ & 1 \\
 \bottomrule
 \end{tabular}
+\caption{}
+\label{tab01}
 \end{table}
 \noindent도달한 leaf가 C인 경우 root로 돌아가 이동을 처음부터 다시 시작하고, 그 외의 경우(A, B, D)에는 이동을 종료하는 것으로 규칙을 정해보자. 그러면 최종적으로 이동을 종료하였을 때, 반드시 A, B, D 중 하나의 leaf 노드에서 멈추게 된다. root에서 출발하여 이동을 A, B에서 종료하는 사건을 ${E}_{1}$, D에서 종료하는 사건을 ${E}_{2}$라고 하자. ${E}_{1}$이 발생하려면 root에서 출발한 뒤 바로 A, B에 도달하거나, C에 도달하여 처음부터 다시 시작하는 것을 1회 이상 반복한 뒤 마지막에 A, B에 도달하여야 한다. 따라서 ${E}_{1}$이 발생할 확률은 다음과 같이 구할 수 있다.
 \[
@@ -253,10 +258,13 @@ Figure \ref{fig02}의 정 이진트리는 A부터 D까지 총 4개의 leaf를 �
 \midrule
 $\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{3}{7}$ & $\displaystyle \frac{4}{7}$ & 1 \\
 \bottomrule
+\caption{}
+\label{tab02}
 \end{tabular}
 \end{table}
 
-Figure \ref{fig02}에서 각 leaf 노드를 A, B, C, D 대신 다음과 같이 표현하여 해당 노드에 도달한 순간 발생하는 사건을 나타낼 수 있다.
+Figure \ref{fig03}과 같이 Figure \ref{fig02}의 트리에서 각 leaf 노드를 A, B 대신 $\textnormal{E}_{1}$, C 대신 Re, D 대신 $\textnormal{E}_{2}$로 표현하면 해당 노드에 도달한 순간 발생하는 사건을 바로 나타낼 수 있다. 이렇게 표현하면 이제 사건의 이름이 대응되는 노드에 도달할 시엔 대응되는 해당 사건이 발생하고, Re에 대응되는 노드에 도달할 시엔 처음부터 다시 시작한다고 하는 것이 가능해진다.
+
 \begin{figure}[h]
 \centering
 \begin{forest}
@@ -269,20 +277,116 @@ for tree = {
 }
 [,fill
   [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
-    [E1, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+    [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
-      [E1, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
       [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
     ]
   ]
-  [E2, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+  [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
 ]
 \end{forest}
+\label{fig03}
 \end{figure}
 
-지금까지의 내용을 통해,
 
-X가 이산균등분포를 따를 때, 시행을 한 번 할 때마다 X의 값이 결정된다.
+지금까지의 내용을 정리해보자. $X \sim \textnormal{unif}\{1, 2\}$일 때 \textit{X}를 반복적으로 구하며 root에서 시작하여 leaf에 도달할 때까지 대응되는 간선을 통해 자식 노드로 이동하는 규칙을 따른다고 할 때, 각 leaf에 도달하였을 때 발생하는 사건이 정해져 있는 Figure \ref{fig03}의 정 이진 트리가 주어지면 해당 트리로부터 
+
+$X \sim \textnormal{unif}\{1, k\}$ 일 때 반복적으로 \textit{X}의 값을 구하면서 정 \textit{k}진 트리 \textit{T}의 root에서 시작하여 leaf에 도달할 때까지 대응되는 간선을 통해 자식 노드로 이동하는 규칙을 따른다고 하자. \textit{T}의 leaf들에는 사건을 나타내는 이름 또는 `Re'가 대응되어 있다. 사건의 이름이 대응되어 있는 노드 도달 시에는 이동을 종료한 뒤 대응되는 해당 사건이 발생한 것으로 하고, `Re'가 대응되어 있는 노드에 도달 시에는 처음부터 다시 시작하는 것으로 하자. 이제부터 이를 `\textit{T}가 시행 규칙을 나타낸다'고 표현하겠다.
+현재 위치하는 노드가 어디인지에 따라 다음 \textit{X}를 구하는 시행을 해야하는 지 아닌지 결정된다는 의미에서 
+
+
+또한, 사건의 이름이 대응되어 있는 노드 도달 시에는 이동을 종료하고 대응되는 해당 사건이 발생한 것으로 하고, `Re'가 대응되어 있는 노드에 도달 시에는 처음부터 다시 시작하는 것으로 하자. 이 때, leaf들에 사건의 이름 또는 `Re'가 대응되어 있는 어떤 정 \textit{k}진 트리 \textit{T}에 대해 위의 규칙을 적용하면 현재 위치하는 노드가 어디인지에 따라 다음 \textit{X}를 구하는 시행을 해야하는 지 아닌지 결정된다.  위에서 진행한 과정을 통해, 시행 규칙을 나타내는 정 \textit{k}진 트리 \textit{T}가 주어지면 \textit{T}의 leaf들에 적힌 각각의 사건이 발생할 확률의 표를 구할 수 있다.
+
+그렇다면 동일한 조건 하에서 반대로, 상호배타적(mutually disjoint)인 어떤 사건들이 발생할 확률이 정의되어 있는 표에 대해 해당 표를 구할 수 있는, leaf들에 사건의 이름 또는 `Re'가 대응되어 있는 특정한 정 \textit{k}진 트리를 찾을 수 있을까? 다음 예를 살펴보자.
+
+우선 위에서와 동일하게 이산확률변수 \textit{Y}에 대하여 사건 $E_{y}$가 발생하면 $Y=y$라고 정의하고, \textit{Y}의 확률분포표가 다음과 같다고 하자.
+\\
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccc}
+\toprule
+ & \rule{0.8cm}{0pt} & \rule{0.3cm}{0pt} & \rule{0.8cm}{0pt} & \rule{0.4cm}{0pt} \\[-\arraystretch\normalbaselineskip]
+\textit{Y} & 1 & 2 & 3 & \textbf{계} \\
+\midrule
+$\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{1}{6}$ & $\displaystyle \frac{1}{3}$ & $\displaystyle \frac{1}{2}$ &  1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent $\frac{1}{6}:\frac{1}{3}:\frac{1}{2}$ 와 동일한 정수비로 $1:2:3$가 존재하며, 이 정수비를 구성하는 각각의 숫자의 합 6에 대해 $2^{h} \ge 6$을 만족하는 \textit{h}의 값으로 3을 구할 수 있다. 3을 높이로 하는 완전 이진 트리를 그리면 해당 트리의 leaf 개수는 총 $2^{3}=8$개이다. 이제 8개의 leaf 노드 중 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$을 각각 1, 2, 3개의 노드에 대응시키고 나머지 노드에는 `Re'를 대응시키면 Figure \ref{fig03}과 같은 트리가 된다.
+
+\begin{figure}[h]
+\centering
+\begin{forest}
+for tree = {
+    circle,
+    minimum size=15pt,
+    inner sep=0.1pt,
+    calign=center,
+    anchor=center,
+}
+[,fill
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=4pt,font=\footnotesize]{1}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+      [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+      [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+  ]
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+      [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+  ]
+]
+\end{forest}
+\caption{}
+\label{fig04}
+\end{figure}
+
+Figure \ref{fig04}에서 
+
+
+
+
+
+
+
+
+
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccc}
+\toprule
+ & \rule{0.8cm}{0pt} & \rule{0.3cm}{0pt} & \rule{0.8cm}{0pt} & \rule{0.4cm}{0pt} \\[-\arraystretch\normalbaselineskip]
+\textit{Y} & 1 & $\cdots$ & \textit{n} & \textbf{계} \\
+\midrule
+$\textnormal{Pr}(Y=y)$ & $p_{1}$ & $\cdots$ & $p_{n}$ &  1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\noindent 모든 확률이 유리수이므로 $p_{1}:\dots:p_{n}$ 와 동일한 정수비 $z_{1}:\dots:z_{n}$가 존재하며, $z_{1},\cdots, z_{n}$에 대해 다음을 만족하는 정수 \textit{h}를 구할 수 있다.
+\[k^{h} \ge \sum_{i=1}^{n} z_{i}\]
+이렇게 구한 \textit{h}를 높이로 하는 완전 k진 트리를 그리면 해당 트리의 leaf 개수는 총 $k^{h}$개이다. 이제 
+
+
+
+
+
+
+
+
 root에서 시작, 시행 후 X의 값에 따라 해당하는 간선을 통해 자식 노드로 이동
 도착 후
 아무것도 적혀있지 않은 경우 - 방금 한 내용을 반복
