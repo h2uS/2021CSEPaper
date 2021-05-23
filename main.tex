@@ -17,6 +17,7 @@
 
 \usepackage{amsthm}
 \newtheorem*{definition}{Definition}
+\newtheorem*{theorem}{Theorem}
 
 \title{이산균등분포로부터 임의의 확률분포를 만들어내는\\시행 규칙 생성 알고리즘 연구}
 \subtitle{보드게임에서의 확률적 요소 구현에 관하여}
@@ -265,7 +266,7 @@ $\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{3}{7}$ & $\displaystyle \frac{4}{7
 \label{tab02}
 \end{table}
 
-Figure \ref{fig03}과 같이 Figure \ref{fig02}의 트리에서 각 leaf 노드를 A, B 대신 $\textnormal{E}_{1}$, C 대신 Re, D 대신 $\textnormal{E}_{2}$로 표현하면 해당 노드에 도달한 순간 발생하는 사건을 바로 나타낼 수 있다. 이렇게 표현하면 이제 사건의 이름이 대응되는 노드에 도달할 시엔 대응되는 해당 사건이 발생하고, Re에 대응되는 노드에 도달할 시엔 처음부터 다시 시작한다고 표현할 수 있다.
+Figure \ref{fig03}과 같이 Figure \ref{fig02}의 트리에서 각 leaf 노드를 A, B 대신 $\textnormal{E}_{1}$, C 대신 Re, D 대신 $\textnormal{E}_{2}$로 표현하면 해당 노드에 도달한 순간 발생하는 사건을 바로 나타낼 수 있다. 이 트리에서는 이제 사건의 이름이 대응되는 노드에 도달할 시엔 대응되는 해당 사건이 발생하고, Re에 대응되는 노드에 도달할 시엔 처음부터 다시 시작한다고 표현할 수 있다.
 
 \begin{figure}[h]
 \centering
@@ -279,98 +280,139 @@ for tree = {
 }
 [,fill
   [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
-    [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+    [$\textnormal{E}_{1}$, draw, fill=yellow, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
-      [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{1}$, draw, fill=yellow, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
       [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
     ]
   ]
-  [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+  [$\textnormal{E}_{2}$, draw, fill=green, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
 ]
 \end{forest}
 \caption{}
 \label{fig03}
 \end{figure}
 
-지금까지의 내용을 정리해보자. $X \sim \textnormal{unif}\{1, 2\}$일 때 $X$를 반복적으로 구하며 root에서 시작하여 leaf에 도달할 때까지 대응되는 간선을 통해 자식 노드로 이동하는 규칙을 따른다고 할 때, 각 leaf에 도달하는 경우의 발생하는 사건이 정해져 있는 Figure \ref{fig03}의 정 이진 트리가 주어지면 해당 트리로부터 Table \ref{tab02}가 나타내는 확률분포를 계산을 통해 구할 수 있다. 이 때 Figure \ref{fig03}의 정 이진 트리를 `시행 규칙'이라고 하자. 다음은 일반화된 경우의 정의이다.
+지금까지의 내용을 정리해보자. $X \sim \textnormal{unif}\{1, 2\}$인 $X$를 반복적으로 구하며 root에서 시작하여 leaf에 도달할 때까지 대응되는 간선을 통해 자식 노드로 이동하는 규칙을 따른다고 할 때, 각 leaf에 도달하는 경우의 발생하는 사건이 정해져 대응되어 있는 Figure \ref{fig03}의 정 이진 트리가 주어지면 해당 트리로부터 Table \ref{tab02}가 나타내는 확률분포를 계산을 통해 구할 수 있다.
 
+매 순간마다 현재 어떤 노드에 있는 지에 따라 $X$를 구하는 시행을 해야하는 지 아닌지 나타내고 있다는 의미에서 Figure \ref{fig03}의 정 이진 트리를 `시행 규칙'이라고 부르겠다. 이를 일반화하여 정의하면 다음과 같다.
+\\
+
+\singlespacing
 \begin{definition}
 트리 T가 다음을 만족할 때 T를 \textbf{시행 규칙}이라고 한다.
 \begin{enumerate}
     \item T는 정 k진 트리이다.
-    \item T의 각 노드마다 자식 방향으로의 간선들에 1부터 k까지의 값이 중복되지 않게 대응되어 있다.
-    \item T의 각 leaf 노드에는 $\textnormal{E}_i$ 꼴 또는 \textnormal{Re}가 대응된다. (i는 자연수)
+    \item T의 모든 노드마다 자식 방향으로의 간선들에 1부터 k까지의 값이 중복되지 않게 대응되어 있다.
+    \item T의 모든 leaf 노드에는 $\textnormal{E}_i$ 꼴 또는 \textnormal{Re}가 대응된다. (i는 자연수)
 \end{enumerate}
 \end{definition}
+\doublespacing
 
 \begin{definition}
 \textbf{시행 규칙 T로부터 구한 확률분포}란 다음과 같이 정의된다.
 
-T가 정 k진 트리일 때, T의 root에서 시작하여 leaf에 도달할 때까지 $X \sim \textnormal{unif}\{1, k\}$인 X를 반복적으로 구하며 나오는 값에 따라 대응되는 자식 노드 방향 간선을 따라서 이동한다. \textnormal{Re}가 대응되어 있는 leaf 노드에 도달할 경우 root로 돌아가 처음부터 다시 시작한다. $\textnormal{E}_i$가 대응되어 있는 leaf 노드에 도달할 경우 이동을 종료하며 이 때 발생한 사건은 $E_{i}$라고 한다. (i는 자연수) 최종적으로 이동을 종료하였을 때 발생한 사건이 $E_{i}$일 때 $Y = i$인 이산확률변수 Y를 정의한다. 이때 Y가 따르는 확률분포가 T로부터 구한 확률분포가 된다.
+T가 정 k진 트리일 때, T의 root에서 시작하여 leaf에 도달할 때까지 $X \sim \textnormal{unif}\{1, k\}$인 X를 구하여 나오는 값에 따라 대응되는 자식 노드 방향 간선을 따라서 이동하는 것을 반복한다. \textnormal{Re}가 대응되어 있는 leaf 노드에 도달할 경우 root로 돌아가 처음부터 다시 시작한다. $\textnormal{E}_i$가 대응되어 있는 leaf 노드에 도달할 경우 이동을 종료하며 이 때 발생한 사건은 $E_{i}$라고 한다. (i는 자연수) 최종적으로 이동을 종료하였을 때 발생한 사건이 $E_{i}$일 때 $Y = i$인 이산확률변수 Y를 정의한다. 이때 Y가 따르는 확률분포가 T로부터 구한 확률분포가 된다.
 \end{definition}
 
 \subsection{Trial Rule from Probability Distribution}
-앞에서 ... 그렇다면 반대로 상호배타적(mutually disjoint)인 어떤 사건들이 발생할 확률이 정의되어 있는 표에 대해 해당 표를 구할 수 있는, leaf들에 사건의 이름 또는 `Re'가 대응되어 있는 특정한 정 $k$진 트리를 찾을 수 있을까? 다음 예를 살펴보자.
+앞에서 시행 규칙 $T$로부터 확률분포를 구하는 과정을 보였다. 그렇다면 반대로 특정 이산확률분포에 대해 해당 확률분포를 구할 수 있는 시행 규칙을 찾을 수 있을까? 이산확률변수가 가질 수 있는 값들의 수가 유한하고, 모든 확률이 유리수라면 이 역시 가능하다. 지금부터 이를 보일 것이다. 
 
-% 우선 위에서와 동일하게 이산확률변수 $Y$에 대하여 사건 $E_{y}$가 발생하면 $Y=y$라고 정의하고, $Y$의 확률분포표가 다음과 같다고 하자.
-% \\
-% \begin{table}[h]
-% \centering
-% \begin{tabular}{cccccc}
-% \toprule
-%  & \rule{0.8cm}{0pt} & \rule{0.3cm}{0pt} & \rule{0.8cm}{0pt} & \rule{0.4cm}{0pt} \\[-\arraystretch\normalbaselineskip]
-% $Y$ & 1 & 2 & 3 & \textbf{계} \\
-% \midrule
-% $\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{1}{6}$ & $\displaystyle \frac{1}{3}$ & $\displaystyle \frac{1}{2}$ &  1 \\
-% \bottomrule
-% \end{tabular}
-% \end{table}
+예를 먼저 들어보자. 이산확률변수 $Y$의 확률분포표가 Table \ref{tab03}과 같다고 하자.
+\\
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccc}
+\toprule
+ & \rule{0.8cm}{0pt} & \rule{0.3cm}{0pt} & \rule{0.8cm}{0pt} & \rule{0.4cm}{0pt} \\[-\arraystretch\normalbaselineskip]
+$Y$ & 1 & 2 & 3 & \textbf{계} \\
+\midrule
+$\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{1}{6}$ & $\displaystyle \frac{1}{3}$ & $\displaystyle \frac{1}{2}$ & 1 \\
+\bottomrule
+\end{tabular}
+\caption{}
+\label{tab03}
+\end{table}
 
-% \noindent $\frac{1}{6}:\frac{1}{3}:\frac{1}{2}$ 와 동일한 정수비로 $1:2:3$가 존재하며, 이 정수비를 구성하는 각각의 숫자의 합 6에 대해 $2^{h} \ge 6$을 만족하는 \textit{h}의 값으로 3을 구할 수 있다. 3을 높이로 하는 완전 이진 트리를 그리면 해당 트리의 leaf 개수는 총 $2^{3}=8$개이다. 이제 8개의 leaf 노드 중 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$을 각각 1, 2, 3개의 노드에 대응시키고 나머지 노드에는 `Re'를 대응시키면 Figure \ref{fig03}과 같은 트리가 된다.
+\noindent 모든 확률이 유리수이므로 각각의 확률의 비인 $\frac{1}{6}:\frac{1}{3}:\frac{1}{2}$ 와 동일한 정수비가 존재하며 여기서는 이 중 $1:2:3$를 택하겠다. 그리고 이 정수비를 구성하는 숫자들의 합 $1+2+3=6$에 대해 $2^{h} \ge 6$을 만족하는 \textit{h} 값들 중에서 3을 택하겠다. 3을 높이로 하는 완전 이진 트리를 그리면 해당 트리의 leaf 개수는 총 $2^{3}=8$개이다. 이제 8개의 leaf 노드 중 왼쪽부터 차례대로 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$을 각각 1, 2, 3개의 노드에 대응시키고 나머지 노드에는 `Re'를 대응시키며, 각 노드마다 가지는 자식 방향 간선 2개에 1, 2를 대응시키면 Figure \ref{fig04}과 같은 트리가 된다.
+\\
+\begin{figure}[h]
+\centering
+\begin{forest}
+for tree = {
+    circle,
+    minimum size=15pt,
+    inner sep=0.1pt,
+    calign=center,
+    anchor=center,
+}
+[,fill
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=4pt,font=\footnotesize]{1}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+      [$\textnormal{E}_{1}$, draw, fill=yellow, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{2}$, draw, fill=green, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+      [$\textnormal{E}_{2}$, draw, fill=green, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+  ]
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
+    ]
+  ]
+]
+\end{forest}
+\caption{}
+\label{fig04}
+\end{figure}
 
-% \begin{figure}[h]
-% \centering
-% \begin{forest}
-% for tree = {
-%     circle,
-%     minimum size=15pt,
-%     inner sep=0.1pt,
-%     calign=center,
-%     anchor=center,
-% }
-% [,fill
-%   [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=4pt,font=\footnotesize]{1}}
-%     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
-%       [$\textnormal{E}_{1}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
-%       [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
-%     ]
-%     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
-%       [$\textnormal{E}_{2}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
-%       [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
-%     ]
-%   ]
-%   [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
-%     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
-%       [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
-%       [$\textnormal{E}_{3}$, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
-%     ]
-%     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
-%       [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
-%       [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}]
-%     ]
-%   ]
-% ]
-% \end{forest}
-% \caption{}
-% \label{fig04}
-% \end{figure}
+Figure \ref{fig04}는 시행 규칙의 정의를 만족하므로 확률분포를 구할 수 있다. 우선 root에서 출발하여 leaf에 도달할 때까지 이동을 하는 경우 모든 leaf 노드가 도달 확률이 $\frac{1}{8}$로 같다. 따라서 root에서 출발하여 leaf에 도달한 순간 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$, Re에 도달하게 될 확률은 각각 $\frac{1}{8}$, $\frac{2}{8}$, $\frac{3}{8}$, $\frac{2}{8}$이 된다. 이제 앞 절에서 설명했던 것과 마찬가지 방법으로 $E_{1}$, $E_{2}$, $E_{3}$가 발생할 확률을 각각 구해보면 다음과 같다.
+\[
+\begin{split}
+\textnormal{Pr}(E_{1}) & = \sum_{i=0}^{\infty} \frac{1}{8}\left(\frac{1}{4}\right)^i = \frac{1}{8}\left(\frac{1}{1 - \frac{1}{4}}\right) = \,\frac{1}{6}\\
+\textnormal{Pr}(E_{2}) & = \sum_{i=0}^{\infty} \frac{1}{4}\left(\frac{1}{4}\right)^i = \frac{1}{4}\left(\frac{1}{1 - \frac{1}{4}}\right) = \,\frac{1}{3}\\
+\textnormal{Pr}(E_{3}) & = \sum_{i=0}^{\infty} \frac{3}{8}\left(\frac{1}{4}\right)^i = \frac{3}{8}\left(\frac{1}{1 - \frac{1}{4}}\right) = \,\frac{1}{2}
+\end{split}
+\]
+이산확률변수 $Y$에 대하여 사건 $E_{y}$가 발생하면 $Y=y$라고 정의하고 확률분포를 구하면, Table \ref{tab03}과 동일한 확률분포를 얻을 수 있다. 지금까지의 내용을 일반화하면 다음과 같다.\\
 
-% Figure \ref{fig04}에서 
+\singlespacing
+\begin{theorem}
+자연수 n과 유리수 $p_{1}, \cdots, p_{n}\,(p_{1}+\dots+p_{n}=1)$에 대하여 다음과 같은 확률분포
+\[\textnormal{Pr}(X = i) = p_{i} \quad(i = 1,\cdots, n)\]
+가 주어졌을 때, 이 확률분포를 구할 수 있는 정 k진 트리인 시행 규칙 T는 다음과 같은 과정을 통해 찾을 수 있다.
+\begin{enumerate}
+    \item $p_{1}:\dots:p_{n}$와 동일한 정수비 $z_{1}:\dots:z_{n}$를 구한다.
+    \item $k^{h} \ge \displaystyle \sum_{i=1}^{n} z_{i}$를 만족하는 자연수 h를 구한다.
+    \item 높이가 h인 완전 k진 트리 T를 그리고, T의 각 노드마다 자식 방향으로의 간선들에 1부터 k까지의 값을 중복되지 않게 대응시킨다.
+    \item T의 leaf 노드들에 $\textnormal{E}_1,\cdots,\textnormal{E}_n,\textnormal{Re}$를 각각 $z_{1},\dots,z_{n},\left(k^{h}-\displaystyle \sum_{i=1}^{n}z_{i}\right)$ 개 대응시킨다.
+\end{enumerate}
+\end{theorem}
 
+\doublespacing
+\begin{proof}
+T는 완전 k진 트리이므로 정 k진 트리이고, 또한 3.과 4.의 과정으로 인해 시행 규칙의 정의를 만족하게 된다. 따라서 T로부터 확률분포를 구할 수 있다. root에서 leaf에 도달할 때까지 이동을 할 경우 모든 leaf 노드에 대해 도달 확률이 $\dfrac{1}{k^{h}}$로 같다. 따라서 root에서 출발하여 leaf에 도달한 순간 $\textnormal{E}_1,\cdots,\textnormal{E}_n,\textnormal{Re}$에 도달하게 될 확률은 각각 $\dfrac{z_{1}}{k^{h}},\cdots,\dfrac{z_{n}}{k^{h}},\dfrac{k^{h}-\sum_{i=1}^{n}z_{i}}{k^{h}}$이다.
 
+이제 $E_{i}\,(i=1,\cdots,n)$가 발생할 확률을 계산하면 다음과 같다.
+\[
+\begin{split}
+\textnormal{Pr}(E_{i}) & = \sum_{j'=0}^{\infty} \frac{z_{i}}{k^{h}}\left(\frac{k^{h}-\sum_{j=1}^{n}z_{j}}{k^{h}}\right)^{j'} = \frac{z_{i}}{k^{h}}\left(\frac{1}{1 - \frac{k^{h}-\sum_{j=1}^{n}z_{j}}{k^{h}}}\right) = \frac{z_{i}}{k^{h}}\left(\frac{k^{h}}{\sum_{j=1}^{n}z_{j}}\right)\\
+& = \,\frac{z_{i}}{\sum_{j=1}^{n}z_{j}}
+\end{split}
+\]
+$p_{1}:\dots:p_{n} = z_{1}:\dots:z_{n}$이므로 $z_{j} = cp_{j}$로 표현할 수 있고, 또 $\sum_{j=1}^{n}p_{j} = 1$이므로
+\[\textnormal{Pr}(E_{i}) = \frac{z_{i}}{\sum_{j=1}^{n}z_{j}} = \frac{cp_{i}}{\sum_{j=1}^{n}cp_{j}} = \frac{cp_{i}}{c\sum_{j=1}^{n}p_{j}} = \frac{p_{i}}{\sum_{j=1}^{n}p_{j}} = p_{i}\]
+따라서 이산확률변수 $X$에 대하여 사건 $E_{i}$가 발생하면 $X = i$라고 정의하면 $X$는 처음에 주어졌던 확률분포를 따르게 된다.
+\end{proof}
 
-
-
+\subsection{Trial Number Expectation}
 
 
 
