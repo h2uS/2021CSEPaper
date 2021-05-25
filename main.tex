@@ -53,21 +53,19 @@ $X \sim \textnormal{unif}\{1, k\}$
 \subsection{Law of Total Expectation}
 이산확률변수 $X$의 기댓값(expectation)은 다음과 같다.
 \[\textbf{E}[X] = \sum_{x} x\,\textnormal{Pr}(X = x)\]
-위 정의에서 합을 나타내는 시그마 기호는 $X$의 범위 안에 포함되는 가능한 모든 $x$에 대해 적용된다.
+위 정의에서와 같이 표현되는 시그마 기호는 $X$의 범위 안에 포함되는 가능한 모든 $x$에 대해 적용되는 합을 의미한다.
 
 사건 $B$가 발생했다는 전제 하에서 사건 $A$가 발생할 조건부확률(conditional probability)은 다음과 같다.
 \[\textnormal{Pr}(A\,|\,B) = \frac{\textnormal{Pr}(A \cap B)}{\textnormal{Pr}(B)}\]
 
 조건부확률의 정의를 이용하여 조건부기댓값(conditional expectation)을 정의할 수 있다. 사건 $A$가 발생했다는 전제 하에서 이산확률변수 $X$의 조건부기댓값은 다음과 같다.
-\[\textbf{E}[X\,|\,A] = \sum_{x} x\,\textnormal{Pr}(X = x\,|\,A)\]
-위 정의에서 합을 나타내는 시그마 기호는 $X$의 범위 안에 포함되는 가능한 모든 $x$에 대해 적용된다.
-
-전체 기댓값의 법칙에 따르면 기댓값을 조건부기댓값들의 합으로 나타낼 수 있다.
+\[\textbf{E}[X|A] = \sum_{x} x\,\textnormal{Pr}(X = x\,|\,A)\]
+그리고 전체 기댓값의 법칙(Law of Total Expectation)에 따르면 기댓값을 조건부기댓값들의 합으로 나타낼 수 있다.
 
 \singlespacing
 \begin{theorem_}[Law of Total Expectation]
-사건 $E_{1}$, ... , $E_{n}$에 대해 \{$E_{1}$, ... , $E_{n}$\}이 표본공간 $S$를 분할할 때,
-\[\textbf{E}[X] = \sum_{i=1}^{n} \textnormal{Pr}(E_{i})\textbf{E}[X\,|\,E_{i}]\]
+사건 $E_{1}$, ... , $E_{n}$에 대해 \{$E_{1}$, ... , $E_{n}$\}이 표본공간 $S$를 분할할 때 이산확률변수 $X$에 대해,
+\[\textbf{E}[X] = \sum_{i=1}^{n} \textnormal{Pr}(E_{i})\textbf{E}[X|E_{i}]\]
 
 \end{theorem_}
 \doublespacing
@@ -81,7 +79,14 @@ $X \sim \textnormal{unif}\{1, k\}$
 \end{enumerate}
 따라서 다음과 같다.
 \[
-\sum_{i=1}^{n} \textnormal{Pr}(E_{i})\textbf{E}[X\,|\,E_{i}]
+\begin{split}
+\sum_{i=1}^{n} \textnormal{Pr}(E_{i})\textbf{E}[X|E_{i}] & = \sum_{i=1}^{n} \textnormal{Pr}(E_{i}) \left(\sum_{x} x\,\textnormal{Pr}(X = x\,|\,E_{i})\right)\\
+& = \sum_{i=1}^{n} \textnormal{Pr}(E_{i}) \left(\sum_{x} x\,\frac{\textnormal{Pr}(X = x\,\cap\,E_{i})}{\textnormal{Pr}(E_{i})}\right)\\
+& = \sum_{i=1}^{n} \left(\sum_{x} x\,\textnormal{Pr}(X = x\,\cap\,E_{i})\right)\\
+& = \sum_{x} \left(\sum_{i=1}^{n} x\,\textnormal{Pr}(X = x\,\cap\,E_{i})\right)\\
+& = \sum_{x} x\,\textnormal{Pr}(X = x\,\cap\,S) = \sum_{x} x\,\textnormal{Pr}(X = x)\\
+& = \textbf{E}[X]
+\end{split}
 \]
 \end{proof}
 \doublespacing
@@ -334,7 +339,7 @@ for tree = {
 \begin{enumerate}
     \item T는 정 k진 트리이다.
     \item T의 모든 노드마다 자식 방향으로의 간선들에 1부터 k까지의 값이 중복되지 않게 대응되어 있다.
-    \item T의 모든 leaf 노드에는 $\textnormal{E}_i$ 꼴 또는 \textnormal{Re}가 대응된다. (i는 자연수)
+    \item T의 모든 leaf 노드에는 $\textnormal{E}_i$ 꼴 또는 \textnormal{Re}가 대응된다. (i는 자연수)\\
 \end{enumerate}
 \end{definition}
 \doublespacing
@@ -482,7 +487,7 @@ for tree = {
 \label{fig05}
 \end{figure}
 
-Figure \ref{fig05}에서 결과가 결정될 때까지 시행 도구를 사용하는 시행의 횟수를 이산확률변수 $X$로 두자. $X$가 가질 수 있는 값은 모든 자연수이며 각각의 경우에 대해 가능한 시행 도구의 결과 순서와 확률을 정리하면 Table \ref{tab04}와 같은 형태가 된다.
+Figure \ref{fig05}에 주어진 시행 규칙에서 결과가 결정될 때까지 시행 도구를 사용하는 시행의 횟수를 이산확률변수 $X$로 두자. $X$가 가질 수 있는 값은 모든 자연수이며 각각의 경우에 대해 가능한 시행 도구의 결과 순서와 확률을 정리하면 Table \ref{tab04}와 같은 형태가 된다.
 \\
 \begin{table}[h]
 \centering
@@ -500,9 +505,10 @@ $\textnormal{Pr}(X = x)$ & $\displaystyle \frac{1}{3}$ & $\displaystyle \frac{2}
 \label{tab04}
 \end{table}
 
-\noindent $x$가 커질 수록 시행 규칙에서 Re의 존재로 인해 $\textnormal{Pr}(X = x)$을 직접 구하기가 매우 어려워지며, $x$의 범위가 자연수 전체이므로 무한하다. 그러므로 $\textnormal{Pr}(X = x)$ 각각의 값을 구하는 방법 대신 다른 방식을 사용하여 $\textbf{E}[X]$의 값을 구해야 한다.
+\noindent $x$의 범위가 무한하고, $x$가 커질 수록 시행 규칙 상 Re의 존재로 인해 $\textnormal{Pr}(X = x)$을 직접 구하기가 매우 어려워진다. 그러므로 $\textbf{E}[X]$의 값을 구하기 위해선 각각의 경우의 확률을 구하는 대신 다른 방법을 사용하여야 한다.
 
-Theorem \ref{thm02}는 조건부기댓값에 관한 정리로, 이를 이용하여 
+Figure \ref{fig05}에서 leaf 노드의 총 개수는 7개이다. 이 7개의 노드에 번호를 붙이자. 깊이 1, 3인 $\textnormal{E}_{1}$ 노드에는 1, 2번을, 깊이 2, 3인 $\textnormal{E}_{2}$ 노드에는 3, 4번을, 깊이 1, 2, 3인 Re 노드에는 5, 6, 7번을 붙이겠다. root에서 시작하여 맨 처음에 도달하는 leaf 노드의 번호가 i인 사건을 $F_{i}$라고 하면 전체 기댓값의 법칙에 의해 다음이 성립한다.
+
 
 % E[X] = sum xPr(X=x) = ... = sum Pr(Ei)E[X|Ei]
 
