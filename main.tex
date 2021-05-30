@@ -5,6 +5,36 @@
 \usepackage{kotex}
 \usepackage{amsmath}
 \usepackage{forest}
+\forestset{
+  tria/.style={
+    node format={
+      \noexpand\node [
+      draw,
+      shape=regular polygon,
+      regular polygon sides=3,
+      inner sep=0pt,
+      outer sep=0pt,
+      \forestoption{node options},
+      anchor=\forestoption{anchor}
+      ]
+      (\forestoption{name}) {\foresteoption{content format}};
+    },
+    child anchor=parent,
+  },
+  triangle/.style={
+    isosceles triangle, isosceles triangle apex angle=45, child anchor=parent, shape border uses incircle, shape border rotate=90, draw,
+    delay={
+      if={
+        >O_> {!u.n children}{1}
+      }{
+        replace by/.process={ Ow {id} {[, coordinate, tier=##1, append, l'=0pt]}},
+        for siblings={tier/.option=id},
+        no edge,
+      }{},
+    },
+  },
+}
+
 \usepackage{booktabs}
 \usepackage{caption}
 
@@ -19,6 +49,7 @@
 \newtheorem*{definition}{Definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem*{theorem_}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
 
 \title{이산균등분포로부터 임의의 확률분포를 만들어내는\\시행 규칙 생성 알고리즘 연구}
 \subtitle{보드게임에서의 확률적 요소 구현에 관하여}
@@ -669,8 +700,8 @@ for tree = {
   ]
   [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
     [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
-      [,draw, dashed, edge={draw=none}]
-      [,draw, dashed, edge={draw=none}]
+      [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+      [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
     ]
     [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
       [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
@@ -807,7 +838,7 @@ for tree = {
 \label{fig07}
 \end{figure}
 
-\ref{subsection3-3}의 마지막 문단에서 다루었듯이, leaf 노드들의 깊이가 작을 수록 그리고 leaf 노드들 중 Re에 대응되지 않은 노드들의 비중이 클 수록 시행 규칙의 시행 횟수 기댓값이 작은 경향을 띤다. 따라서 Figure \ref{fig04}와 Figure \ref{fig07} 두 시행 규칙에 대해 시행 횟수 기댓값을 줄이는 과정을 최대한 수행하고 나면, Figure \ref{fig04}가 Figure \ref{fig07}보다 시행 횟수 기댓값이 더 작은 시행 규칙이 된다는 걸 형태를 통해 직관적으로 알 수 있다. 다시 말해, Table \ref{tab05}에서 $c = 1$인 경우 $h = 3$일 때 최종적으로 구해지는 시행 규칙이 $h = 4$일 때 최종적으로 구해지는 시행 규칙보다 더 시행 횟수 기댓값이 작다는 것이다. 이를 일반화하여 정리하면 다음과 같다.
+\ref{subsection3-3}의 마지막 문단에서 다루었듯이, leaf 노드들의 깊이가 작을 수록 그리고 leaf 노드들 중 Re에 대응되지 않은 노드들의 비중이 클 수록 시행 규칙의 시행 횟수 기댓값이 작은 경향을 띤다. 따라서 Figure \ref{fig04}와 Figure \ref{fig07} 두 시행 규칙에 대해 시행 횟수 기댓값을 줄이는 과정을 최대한 수행하고 나면, Figure \ref{fig04}가 Figure \ref{fig07}보다 시행 횟수 기댓값이 더 작은 시행 규칙이 된다는 걸 형태를 통해 직관적으로 알 수 있다. 다시 말해, Table \ref{tab05}에서 $c = 1$인 경우 $h = 3$일 때 최종적으로 구해지는 시행 규칙이 $h = 4$일 때 최종적으로 구해지는 시행 규칙보다 더 시행 횟수 기댓값이 작다는 것이다. 계산을 통해 이를 일반화하여 정리하면 다음과 같다.
 
 \singlespacing
 \begin{theorem}
@@ -817,9 +848,7 @@ Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}, h$ 조합을 �
 \doublespacing
 
 \begin{proof}
-$T$가 $l$개의 leaf 노드를 가진 $k$진 트리라고 하자. 각각의 leaf 노드에 대해 $T$의 root에서 시작하여 맨 처음에 도달할 확률, 깊이를 $p_{i}, d_{i}\, (i=1,\cdots,l)$라 하고, leaf 노드들 중 Re가 아닌 노드에 대해 $p_{i}$ 값의 합을 $P$라고 하자. $P$는 $T$의 root에서 시작하여 맨 처음 도달하는 노드가 Re가 아닌 노드일 확률로, Theorem \ref{thm04}의 식의 분모와 동일하다.
-
-Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}, h$ 조합에 대해 $h$만 $h+1$로 증가시킨다는 것은 Theorem \ref{thm02}의 과정이 끝난 직후 만들어진 시행 규칙의 leaf 노드의 수가 $k^{h}$개에서 $k^{h+1}$개로, $(k-1)k^{h}$개 늘어난다는 의미이다. 이때 늘어난 leaf 노드들은 모두 깊이가 $h+1$이고 Re에 대응되므로, 시행 규칙의 시행 횟수 기댓값을 줄이는 과정을 최대한 수행하고 나면 깊이가 1인 $k-1$개의 Re 노드가 된다. 결론적으로 $T'$는 $T$의 root에 형제 노드로 $k-1$개의 Re 노드를 추가하고 새로운 부모 노드를 붙여서 만든 시행 규칙이다. 이를 그림으로 나타내면 다음과 같다.
+$T$가 $k$진 트리라고 하자. Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}, h$ 조합에 대해 $h$만 $h+1$로 증가시킨다는 것은 Theorem \ref{thm02}의 과정이 끝난 직후 만들어지는 시행 규칙의 leaf 노드의 수가 $k^{h}$개에서 $k^{h+1}$개로 늘어난다는 의미이다. 이때 추가되는 $(k-1)k^{h}$개의 leaf 노드들은 모두 깊이가 $h+1$이고 Re에 대응되므로, 시행 규칙의 시행 횟수 기댓값을 줄이는 과정을 최대한 수행하고 나면 깊이가 1인 $k-1$개의 Re 노드가 된다. 결론적으로 $T'$는 $T$의 root에 형제 노드로 $k-1$개의 Re 노드를 추가하고 새로운 부모 노드를 붙여서 만든 시행 규칙이다. $T'$를 그림으로 나타내면 다음과 같다.
 
 \begin{figure}[h]
 \centering
@@ -827,33 +856,115 @@ Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}, h$ 조합에 �
 for tree = {
     minimum size=15pt,
     inner sep=0.1pt,
+    s sep=6mm,
     calign=center,
     anchor=center,
 }
-[,circle,fill
-  [,circle,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}]
-  [$\cdots$, edge={draw=none}]
-  [,circle,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{$k-1$}}]
-  [,circle,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{$k$}}]
+[,circle,fill, 
+  [Re, circle, draw, edge={->, >=latex}, edge label={node[pos=0.4pt,left=2pt,font=\footnotesize]{1}}]
+  [$\cdots$, before drawing tree={y+=0.5em}, edge={dashed}]
+  [Re, circle, draw, edge={->, >=latex}, edge label={node[pos=0.4pt,left=-2pt,font=\footnotesize]{$k-$1}}]
+  [$T$, tria, before drawing tree={y-=1em}, inner sep=3pt, edge={->, >=latex}, edge label={node[pos=0.3pt,right=5pt,font=\footnotesize]{$k$}}]
 ]
 \end{forest}
 \caption{}
 \label{fig08}
 \end{figure}
 
+$T$의 leaf 노드 개수를 $l$이라고 하자. $T$의 root에서 시작하여 맨 처음에 도달할 확률, 깊이를 $p_{i}, d_{i}\, (i=1,\cdots,l)$라 하고, leaf 노드들 중 Re가 아닌 노드들의 $p_{i}$ 값의 합을 $P$라고 하면 Theorem \ref{thm04}에 의해
+\[\textnormal{\textbf{E}}[X] = \frac{\displaystyle \sum_{i=1}^{l}p_{i}d_{i}}{P}\]
+Figure \ref{fig08}을 살펴보면 $T$의 모든 노드에 대해 root에서 시작하여 맨 처음에 도달할 확률이 $\displaystyle \frac{1}{k}$배가 되었고, 깊이는 1 증가한 것을 알 수 있다. 또한 추가된 Re 노드 $k-1$개는 root에서 시작하여 맨 처음에 도달할 확률이 $\displaystyle \frac{1}{k}$이고 깊이는 1이다. 따라서
+\[\textnormal{\textbf{E}}[X'] = \frac{(k-1)\displaystyle \frac{1}{k}\,1 + \displaystyle \sum_{i=1}^{l}\frac{1}{k}p_{i}(d_{i}+1)}{\displaystyle \frac{1}{k}P}\]
+분자와 분모에 $k$를 곱하고 정리하면
+\[
+\begin{split}
+\textnormal{\textbf{E}}[X'] & = \frac{k-1 + \displaystyle \sum_{i=1}^{l}p_{i}(d_{i}+1)}{P}\\
+& = \frac{k-1 + \displaystyle \sum_{i=1}^{l}p_{i}d_{i} + \sum_{i=1}^{l}p_{i}}{P}\\
+& = \frac{\displaystyle \sum_{i=1}^{l}p_{i}d_{i} + k}{P}\\
+& = \textnormal{\textbf{E}}[X] + \frac{k}{P}
+\end{split}
+\]
 \end{proof}
 
-% Thm 동일한 z_1, ..., z_n 조합에 대해 h를 1 크게하여 얻은 시행 규칙 - 시행 횟수 기댓값을 최대로 줄이고 나면 E[X]를 손해본다
-% k진 트리 시행 규칙이 있을 때 root위에 부모 노드를 달고, 형제 노드들에 전부 Re를 박는 행위이며, 이때 E[X]는 정확히 이만큼 손해본다
+Theorem \ref{thm07}은 Theorem \ref{thm02}의 과정에서 일단 특정 $z_{1}, \cdots, z_{n}$ 조합을 선택하고 나면, $h$가 커질 수록 최종적으로 구해지는 시행 규칙의 시행 횟수 기댓값도 커진다는 것을 나타낸다. 이는 다시 말해 $h$가 최소일 때 시행 횟수 기댓값이 최소가 된다는 것을 뜻한다.
 
-% Cor z_1, ..., z_n 조합이 주어지면 가능한 h 값 중 최솟값을 선택한 경우가 구해지는 시행 규칙의 시행 횟수 기댓값이 최소인 경우이다
+\singlespacing
+\begin{corollary}
+Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}$ 조합이 결정되었을 때, $h$를 가능한 최소값을 택하여 시행 규칙을 만든 경우에 해당 시행 규칙에 시행 횟수 기댓값을 줄이는 과정을 최대한 수행하여 최종적으로 구한 시행 규칙의 시행 횟수 기댓값이 최소가 된다.
+\label{cor0701}
+\end{corollary}
+\doublespacing
 
-% 따라서 최솟값인 경우 하나만 따지면 된다.
+Corollary \ref{cor0701}이 의미하는 것은, 특정 확률분포를 구할 수 있는 시행 규칙들 중 가장 시행 횟수 기댓값이 작은 시행 규칙을 찾는 경우에 Theorem \ref{thm02}의 과정에서 $h$가 최소인 경우 하나만 확인해보면 충분하다는 것이다. 예를 들어 Table \ref{tab05}에서 $c=3$일 때는 $h=5$인 경우 하나만 확인하면 충분하다.
 
-% k배는 생략할 수 있다
+가장 시행 횟수 기댓값이 작은 시행 규칙을 찾는 경우에 대해 한 가지를 더 살펴보자. Theorem \ref{thm02}의 과정에서 $z_{1}, \cdots, z_{n}$가 모두 $k$의 배수인 경우, 만들어지는 시행 규칙의 모든 leaf 노드를 $k$개씩 모아 노드 합치기를 수행할 수 있다. 이를 수행하고 나면 각 대응값에 대응된 노드 수가 전부 $\displaystyle \frac{1}{k}$배이고 높이가 1 감소한 새로운 포화 $k$진 트리 시행 규칙을 얻을 수 있는데, 이 시행 규칙 또한 Theorem \ref{thm02}의 과정을 통해 얻을 수 있는 시행 규칙이다. 만약 Table \ref{tab05}에서와 같은 방식으로 $c$의 값을 1부터 차례대로 증가시켜가며 Theorem \ref{thm02}를 적용한다고 하면, $c$의 값이 $k$의 배수 $c_{0}$인 경우의 시행 규칙은 $c$의 값이 $\displaystyle \frac{c_{0}}{k}$일 때 이미 구해진 시행 규칙이 된다. Figure \ref{fig09}을 보면 Table \ref{tab05}에서 $c=2, h=4$인 경우 구해지는 시행 규칙에 노드 합치기를 수행한 결과 $c=1, h=3$인 경우 구해지는 시행 규칙인 Figure \ref{fig04}와 같아지는 것을 확인할 수 있다.\\
 
+\begin{figure}[h]
+\centering
+\begin{forest}
+for tree = {
+    circle,
+    minimum size=15pt,
+    inner sep=0.1pt,
+    calign=center,
+    anchor=center,
+}
+[,fill
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=9pt,font=\footnotesize]{1}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=4pt,font=\footnotesize]{1}}
+      [$\textnormal{E}_{1}$, draw, fill=yellow, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+        [$\textnormal{E}_{1}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{1}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+      [$\textnormal{E}_{2}$, draw, fill=green, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+        [$\textnormal{E}_{2}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{2}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
+      [$\textnormal{E}_{2}$, draw, fill=green, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+        [$\textnormal{E}_{2}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{2}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+    ]
+  ]
+  [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=9pt,font=\footnotesize]{2}}
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,left=4pt,font=\footnotesize]{1}}
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+      [$\textnormal{E}_{3}$, draw, fill=pink, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+        [$\textnormal{E}_{3}$, text=gray, draw, dashed, edge={dashed}]
+      ]
+    ]
+    [,fill, edge={->, >=latex}, edge label={node[pos=0.3pt,right=4pt,font=\footnotesize]{2}}
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,left,font=\footnotesize]{1}}
+        [Re, text=gray, draw, dashed, edge={dashed}]
+        [Re, text=gray, draw, dashed, edge={dashed}]
+      ]
+      [Re, draw, edge={->, >=latex}, edge label={node[pos=0.3pt,right,font=\footnotesize]{2}}
+        [Re, text=gray, draw, dashed, edge={dashed}]
+        [Re, text=gray, draw, dashed, edge={dashed}]
+      ]
+    ]
+  ]
+]
+\end{forest}
+\caption{}
+\label{fig09}
+\end{figure}
+
+지금까지 특정 확률분포를 구할 수 있는 시행 규칙들 중 가장 시행 횟수 기댓값이 작은 시행 규칙을 찾기 위해 어떤 경우들을 조사하여야 하는지 살펴보았다. 해당 경우들을 차례대로 조사하는 프로그램을 제작하고 보드게임 창작자가 이를 사용한다면, 창작자는 자신이 원하는 확률적 요소를 특정 도구로 구현하는 가장 좋은 방법을 빠르고 간편하게 알아낼 수 있을 것이다.
 
 \subsection{Computation with $k$-ary Numeral System}
+각 경우를 조사하는 방법?
+
 
 % Thm02에서 만든 시행 규칙에서 노드 재배치 & 합치기를 계속 해서 최대한으로 수행하는 과정은 어떤 수를 k진법으로 표현하는 것과 구조가 동일하다.
 % 이렇게 구한 k진법 수들만 가지고 E[X] 계산이 가능하다
