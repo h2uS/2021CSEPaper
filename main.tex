@@ -399,7 +399,7 @@ T가 정 k진 트리일 때, T의 root에서 시작하여 leaf에 도달할 때�
 정 $k$진 트리에서 깊이가 $d$로 같은 leaf 노드들은 root에서 시작하여 도달할 확률이 $\left(\frac{1}{k}\right)^{d}$로 모두 동일하기 때문에, 서로 대응된 값을 교환해도 확률분포를 구하는 과정에 영향을 주지 않는다.
 \end{proof}
 
-Theorem \ref{thm01}을 Figure \ref{fig03}의 시행 규칙에 적용해보면, 깊이 3인 두 leaf 노드에 대해 대응값 $\textnormal{E}_{1}$과 Re를 서로 맞바꾼 뒤 계산해도 Table \ref{tab02}이 나온다는 것을 알 수 있다.
+Theorem \ref{thm01}을 Figure \ref{fig03}의 시행 규칙에 적용해보면, 깊이 3인 두 leaf 노드에 대해 대응값 $\textnormal{E}_{1}$과 Re를 서로 맞바꾼 뒤 계산해도 Table \ref{tab02}가 나온다는 것을 알 수 있다.
 
 \subsection{Trial Rule from Probability Distribution} \label{subsection3-2}
 앞에서 시행 규칙 $T$로부터 확률분포를 구하는 과정을 보였다. 그렇다면 반대로 특정 이산확률분포에 대해 해당 확률분포를 구할 수 있는 시행 규칙을 만들어 낼 수 있을까? 이산확률변수가 가질 수 있는 값들의 수가 유한하고, 모든 확률이 유리수라면 이 역시 가능하다. 지금부터 이를 보일 것이다. 
@@ -420,7 +420,7 @@ $\textnormal{Pr}(Y=y)$ & $\displaystyle \frac{1}{6}$ & $\displaystyle \frac{1}{3
 \label{tab03}
 \end{table}
 
-\noindent 모든 확률이 유리수이므로 각각의 확률의 비인 $\frac{1}{6}:\frac{1}{3}:\frac{1}{2}$ 와 동일한 자연수비가 존재하며 여기서는 이 중 $1:2:3$를 택하겠다. 그리고 이 자연수비를 구성하는 숫자들의 합 $1+2+3=6$에 대해 $2^{h} \ge 6$을 만족하는 \textit{h} 값들 중에서 3을 택하겠다. 3을 높이로 하는 완전 이진 트리를 그리면 해당 트리의 leaf 개수는 총 $2^{3}=8$개이다. 이제 8개의 leaf 노드 중 왼쪽부터 차례대로 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$을 각각 1, 2, 3개의 노드에 대응시키고 나머지 노드에는 `Re'를 대응시키며, 각 노드마다 가지는 자식 방향 간선 2개에 1, 2를 대응시키면 Figure \ref{fig04}과 같은 트리가 된다.
+\noindent 모든 확률이 유리수이므로 각각의 확률의 비인 $\frac{1}{6}:\frac{1}{3}:\frac{1}{2}$ 와 동일한 자연수비가 존재하며 여기서는 이 중 $1:2:3$를 택하겠다. 그리고 이 자연수비를 구성하는 숫자들의 합 $1+2+3=6$에 대해 $2^{h} \ge 6$을 만족하는 \textit{h} 값들 중에서 3을 택하겠다. 3을 높이로 하는 완전 이진 트리를 그리면 해당 트리의 leaf 개수는 총 $2^{3}=8$개이다. 이제 8개의 leaf 노드 중 왼쪽부터 차례대로 $\textnormal{E}_{1}$, $\textnormal{E}_{2}$, $\textnormal{E}_{3}$을 각각 1, 2, 3개의 노드에 대응시키고 나머지 노드에는 `Re'를 대응시키며, 각 노드마다 가지는 자식 방향 간선 2개에 1, 2를 대응시키면 Figure \ref{fig04}와 같은 트리가 된다.
 \\
 \begin{figure}[h]
 \centering
@@ -615,9 +615,9 @@ $F_{i}$이 발생했다는 것은 시행 규칙의 root에서 시작하여 맨 �
 
 \singlespacing
 \begin{center}
-$\textbf{E}[X|F_{5}]=\textbf{E}[X]+depth(F_{1})$\\
-$\textbf{E}[X|F_{6}]=\textbf{E}[X]+depth(F_{2})$\\
-$\textbf{E}[X|F_{7}]=\textbf{E}[X]+depth(F_{3})$\\
+$\textbf{E}[X|F_{5}]=\textbf{E}[X]+depth(F_{5})$\\
+$\textbf{E}[X|F_{6}]=\textbf{E}[X]+depth(F_{6})$\\
+$\textbf{E}[X|F_{7}]=\textbf{E}[X]+depth(F_{7})$\\
 \end{center}
 \doublespacing
 
@@ -900,7 +900,7 @@ Theorem \ref{thm02}의 과정에서 특정 $z_{1}, \cdots, z_{n}$ 조합이 결�
 
 Corollary \ref{cor0701}이 의미하는 것은, 특정 확률분포를 구할 수 있는 시행 규칙들 중 시행 횟수 기댓값이 가장 작은 시행 규칙을 찾는 경우에 Theorem \ref{thm02}의 과정에서 $h$가 최소인 경우 하나만 확인해보면 충분하다는 것이다. 예를 들어 Table \ref{tab05}에서 $c=3$일 때는 $h=5$인 경우 하나만 확인하면 충분하다.
 
-시행 횟수 기댓값이 가장 작은 시행 규칙을 찾는 경우에 대해 한 가지 더 확인하고 넘어가자. Theorem \ref{thm02}의 과정에서 $z_{1}, \cdots, z_{n}$가 모두 $k$의 배수인 경우, 만들어지는 시행 규칙의 모든 leaf 노드를 $k$개씩 모아 노드 합치기를 수행할 수 있다. 노드 합치기를 수행하고 나면 각 대응값에 대응된 노드 수가 전부 $\displaystyle \frac{1}{k}$배이고 높이가 1 작은 새로운 포화 $k$진 트리 시행 규칙을 얻을 수 있는데, 이 시행 규칙 또한 Theorem \ref{thm02}의 과정을 통해 만들어질 수 있다. 다시 말해 Table \ref{tab05}에서와 같은 방식으로 $c$의 값을 1부터 차례대로 증가시켜가며 Theorem \ref{thm02}를 적용할 경우, $c$의 값이 $kc_{0}$일 때와 $c_{0}$일 때 ($c_{0}$는 자연수) 동일한 시행 규칙이 만들어진다. 따라서 $c$가 $k$의 배수인 경우는 중복이므로 건너뛰어도 된다. Figure \ref{fig09}을 보면 Table \ref{tab05}에서 $c=2, h=4$인 경우 구해지는 시행 규칙에서 최하단 leaf 노드들에 대해 전부 합치기를 수행한 결과 $c=1, h=3$인 경우 구해지는 시행 규칙인 Figure \ref{fig04}와 같아지는 것을 확인할 수 있다.\\
+시행 횟수 기댓값이 가장 작은 시행 규칙을 찾는 경우에 대해 한 가지 더 확인하고 넘어가자. Theorem \ref{thm02}의 과정에서 $z_{1}, \cdots, z_{n}$가 모두 $k$의 배수인 경우, 만들어지는 시행 규칙의 모든 leaf 노드를 $k$개씩 모아 노드 합치기를 수행할 수 있다. 노드 합치기를 수행하고 나면 각 대응값에 대응된 노드 수가 전부 $\displaystyle \frac{1}{k}$배이고 높이가 1 작은 새로운 포화 $k$진 트리 시행 규칙을 얻을 수 있는데, 이 시행 규칙 또한 Theorem \ref{thm02}의 과정을 통해 만들어질 수 있다. 다시 말해 Table \ref{tab05}에서와 같은 방식으로 $c$의 값을 1부터 차례대로 증가시켜가며 Theorem \ref{thm02}를 적용할 경우, $c$의 값이 $kc_{0}$일 때와 $c_{0}$일 때 ($c_{0}$는 자연수) 동일한 시행 규칙이 만들어진다. 따라서 $c$가 $k$의 배수인 경우는 중복이므로 건너뛰어도 된다. Figure \ref{fig09}를 보면 Table \ref{tab05}에서 $c=2, h=4$인 경우 구해지는 시행 규칙에서 최하단 leaf 노드들에 대해 전부 합치기를 수행한 결과 $c=1, h=3$인 경우 구해지는 시행 규칙인 Figure \ref{fig04}와 같아지는 것을 확인할 수 있다.\\
 
 \begin{figure}[h]
 \centering
