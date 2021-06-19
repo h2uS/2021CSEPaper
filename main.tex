@@ -1075,7 +1075,7 @@ for tree = {
   ]
 ]
 \end{forest}
-\caption{2진법 숫자들로부터 그린 시행 규칙}
+\caption{Table \ref{tab06}로부터 그린 시행 규칙}
 \label{fig10}
 \end{figure}
 
@@ -1084,14 +1084,15 @@ for tree = {
 \section{Implementation}
 
 \subsection{Environment}
-Analysis에서 다룬 내용을 바탕으로 ~개발 환경 에서 프로그램을 개발하였다
+Analysis에서 다룬 내용을 바탕으로 이러한 개발 환경 에서 프로그램을 개발하였다
 
 \subsection{Calculator}
 입력값은 k, vector, extra depth limit\\
-vector 소인수분해\\
-출력 예시\\
 주어진 입력에 대해 c 값을 증가시켜가며 차례대로 기댓값을 계산하여 출력하고, height 별로 시행 횟수 기댓값이 최소인 경우 해당 기댓값과 그 때의 c 값을 출력하는 프로그램을 작성하였다\\
+vector 소인수분해\\
 각 값의 k진수 변환 배열을 전체를 저장할 필요가 없이 계산 가능\\
+출력 예시\\
+c가 k의 배수인 경우 생략
 
 \subsection{Printer}
 Calculator에서 기댓값 출력을 제외\\
@@ -1101,7 +1102,7 @@ k진수 변환 배열들로부터 tree 생성되는 생성자 구현\\
 tree 클래스 내 print 함수 구현 - root로부터 현재까지의 경로를 기억하여 노드 값과 함께 출력하는 preorder traversal 사용\\
 입출력 예시\\
 height가 더 큰데 최솟값이 작은 경우가 없으면 출력하지 않음\\
-height와 E[X] trade off 하여 사용자가 선택\\
+height와 E[X] trade off 하여 사용자가 선택
 
 \section{Result and Discussion}
 
